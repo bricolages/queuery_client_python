@@ -11,7 +11,7 @@ Queuery Redshift HTTP API Client for Python
 - (a) naive iteration
 
 ```python
-from queuery_client_python2 import QueueryClient
+from queuery_client import QueueryClient
 
 client = QueueryClient(endpoint="https://queuery.example.com")
 response = client.run("select column_a, column_b from the_great_table")
