@@ -6,7 +6,7 @@ authors = ["altescy <altescy@fastmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.7.1"
+python = "^3.8.0"
 requests = "^2.25.1"
 importlib-metadata = "^3.7.2"
 python-dateutil = "^2.8.2"
