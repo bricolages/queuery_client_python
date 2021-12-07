@@ -2,7 +2,7 @@
 name = "queuery-client"
 version = "0.1.0"
 description = "Queuery Redshift HTTP API Client for Python"
-authors = ["altescy <altescy@fastmail.com>"]
+authors = ["altescy <altescy@fastmail.com>", "himkt <himkt@klis.tsukuba.ac.jp>", "fufufukakaka <demonstrundum@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
