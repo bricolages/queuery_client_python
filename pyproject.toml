@@ -5,6 +5,7 @@ description = "Queuery Redshift HTTP API Client for Python"
 authors = ["altescy <yasuhiro-yamaguchi@cookpad.com>", "himkt <himkt@cookpad.com>", "fufufukakaka <yusuke-fukasawa@cookpad.com>"]
 readme = "README.md"
 license = "MIT License"
+homepage="https://github.com/bricolages/queuery_client_python"
 
 [tool.poetry.dependencies]
 python = "^3.8.0"
