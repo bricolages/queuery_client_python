@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Client(object):
     api_version = "v1"
+    max_polling_interval = 300
 
     def __init__(
         self,
@@ -73,6 +74,7 @@ class Client(object):
         if timeout < 0:
             raise ValueError("Parameter `timeout` should be positive integer")
 
+        n = 1
         st = time.time()
         logger.info("Waiting for the query (%i) to complete." % (qid))
         while True:
@@ -86,7 +88,8 @@ class Client(object):
                 raise TimeoutError("Query time exceeded (change `timeout` parameter if you want to wait longer.)")
 
             logger.debug(".")
-            time.sleep(3)
+            time.sleep(min(3 * n, self.max_polling_interval))
+            n += 1
 
     def query_and_wait(self, select_stmt: str) -> Response:
         body = self.execute_query(select_stmt)
