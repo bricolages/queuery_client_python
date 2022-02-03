@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Client(object):
     api_version = "v1"
-    max_polling_interval = 300
+    max_polling_interval = 30
 
     def __init__(
         self,
