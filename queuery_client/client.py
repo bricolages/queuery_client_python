@@ -32,7 +32,11 @@ class Client(object):
         self._enable_cast = enable_cast
 
     @property
-    def _auth(self) -> Tuple[Optional[str], Optional[str]]:
+    def _auth(self) -> Optional[Tuple[str, str]]:
+        if self._token is self._token_secret is None:
+            return None
+        if self._token is None or self._token_secret is None:
+            raise ValueError("Both token and token_secret should be specified.")
         return (self._token, self._token_secret)
 
     @property
@@ -80,7 +84,7 @@ class Client(object):
         while True:
             body = self.get_body(qid)
 
-            if body._response.status in ["success", "failed"]:
+            if body._response.status in ("success", "failed"):
                 logger.info("Query (%i) completed" % (qid))
                 return body
 
