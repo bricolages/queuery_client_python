@@ -38,7 +38,6 @@ class Response:
     ):
         self._response = response
         self._data_file_urls = response.data_file_urls
-        self._cursor = 0
         self._parser = csv.reader
         self._session = Session()
         self._enable_cast = enable_cast
@@ -56,8 +55,6 @@ class Response:
         data = self._session.get(url).content
         response = gzip.decompress(data).decode()
         reader = csv.reader(StringIO(response), escapechar="\\")
-
-        self._cursor += 1
         return list(reader)
 
     def fetch_manifest(self, force: bool = False) -> Dict[str, Any]:
