@@ -2,7 +2,7 @@ import csv
 import dataclasses
 import gzip
 from io import StringIO
-from typing import Any, Dict, Iterator, List, Literal, Optional, Union, overload
+from typing import Any, Callable, Dict, Iterator, List, Literal, Optional, Tuple, Type, TypeVar, Union, overload
 
 from requests import Session
 
@@ -13,6 +13,9 @@ try:
     import pandas
 except ModuleNotFoundError:
     pandas = None
+
+
+T = TypeVar("T")
 
 
 @dataclasses.dataclass
@@ -123,3 +126,23 @@ class Response:
             return pandas.DataFrame(elems)
 
         return elems
+
+    def map(self, target: Union[Type[T], Callable[..., T]]) -> Iterator[T]:
+        column_names = self.fetch_column_names() if self._use_manifest else None
+
+        def convert_to_args(row: List[Any]) -> Tuple[List[Any], Dict[str, Any]]:
+            if column_names is None:
+                return row, {}
+            return [], {name: value for name, value in zip(column_names, row)}
+
+        def map_to_target(row: List[Any]) -> T:
+            args, kwargs = convert_to_args(row)
+            return target(*args, **kwargs)
+
+        iterator = map(map_to_target, self)
+
+        if self._use_manifest:
+            record_count = self.fetch_record_count()
+            return SizedIterator(iterator, record_count)
+
+        return iterator
