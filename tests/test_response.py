@@ -44,12 +44,15 @@ def test_response_with_type_cast() -> None:
 
     manifest_response = MockResponse(
         b"""
-        {"schema": {
-            "elements": [
-                {"name": "id", "type": {"base": "integer"}},
-                {"name": "title", "type": {"base": "character varying"}}
-            ]
-        }}
+        {
+            "schema": {
+                "elements": [
+                    {"name": "id", "type": {"base": "integer"}},
+                    {"name": "title", "type": {"base": "character varying"}}
+                ]
+            },
+            "meta": {"record_count": 2}
+        }
         """,
         200,
     )
