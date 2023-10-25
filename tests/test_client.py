@@ -40,7 +40,7 @@ def test_client() -> None:
         201,
     )
 
-    with mock.patch("requests.post", return_value=response):
+    with mock.patch("requests.Session.post", return_value=response):
         _ = client._client.execute_query("select 1 from target.tabele")
 
 
@@ -59,7 +59,7 @@ def test_client_with_type_cast() -> None:
         201,
     )
 
-    with mock.patch("requests.post", return_value=response):
+    with mock.patch("requests.Session.post", return_value=response):
         queuery_response = client._client.execute_query("select 1 from target.table")
         assert queuery_response._enable_cast
         assert queuery_response._response.manifest_file_url == "https://queuery.example.com/manifest"

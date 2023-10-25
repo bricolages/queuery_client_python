@@ -1,5 +1,7 @@
 from typing import Optional
 
+from requests import Session
+
 from queuery_client.client import Client
 from queuery_client.exceptions import QueueryError
 from queuery_client.response import Response
@@ -11,11 +13,13 @@ class QueueryClient:
         endpoint: Optional[str] = None,
         timeout: int = 300,
         enable_cast: bool = False,
+        session: Optional[Session] = None,
     ) -> None:
         self._client = Client(
             endpoint=endpoint,
             timeout=timeout,
             enable_cast=enable_cast,
+            session=session,
         )
 
     def run(self, sql: str) -> Response:

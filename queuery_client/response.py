@@ -4,7 +4,7 @@ import gzip
 from io import StringIO
 from typing import Any, Dict, Iterator, List, Literal, Optional, Union, overload
 
-import requests
+from requests import Session
 
 from queuery_client.cast import cast_row
 
@@ -34,12 +34,13 @@ class Response:
         self,
         response: ResponseBody,
         enable_cast: bool = False,
+        session: Optional[Session] = None,
     ):
         self._response = response
         self._data_file_urls = response.data_file_urls
         self._cursor = 0
         self._parser = csv.reader
-        self._session = requests.Session()
+        self._session = Session()
         self._enable_cast = enable_cast
         self._manifest: Optional[Dict[str, Any]] = None
 

@@ -4,6 +4,7 @@ import time
 from typing import Optional, Tuple
 
 import requests
+from requests import Session
 
 from queuery_client.response import Response, ResponseBody
 
@@ -21,6 +22,7 @@ class Client(object):
         token_secret: Optional[str] = None,
         timeout: int = 300,
         enable_cast: bool = False,
+        session: Optional[Session] = None,
     ) -> None:
         endpoint = endpoint or os.getenv("QUEUERY_ENDPOINT")
         if endpoint is None:
@@ -30,6 +32,7 @@ class Client(object):
         self._token_secret = token_secret or os.getenv("QUEUERY_TOKEN_SECRET")
         self._timeout = timeout
         self._enable_cast = enable_cast
+        self._session = session or Session()
 
     @property
     def _auth(self) -> Optional[Tuple[str, str]]:
@@ -50,7 +53,7 @@ class Client(object):
         if self._enable_metadata:
             payload["enable_metadata"] = "true"
 
-        with requests.post(url=request_url, auth=self._auth, data=payload) as resp:
+        with self._session.post(url=request_url, auth=self._auth, data=payload) as resp:
             resp.raise_for_status()
             if resp.status_code == requests.codes.created:
                 body = ResponseBody.from_dict(resp.json())
@@ -67,11 +70,15 @@ class Client(object):
 
         data = {"fields": ",".join(fields)}
 
-        with requests.get(url=request_url, auth=self._auth, data=data) as resp:
+        with self._session.get(url=request_url, auth=self._auth, data=data) as resp:
             if resp.status_code != requests.codes.ok:
                 resp.raise_for_status()
             body = ResponseBody.from_dict(resp.json())
-            return Response(response=body, enable_cast=self._enable_cast)
+            return Response(
+                response=body,
+                enable_cast=self._enable_cast,
+                session=self._session,
+            )
 
     def wait_for(self, qid: int) -> Response:
         timeout = self._timeout
