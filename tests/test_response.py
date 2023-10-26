@@ -1,3 +1,4 @@
+import dataclasses
 import gzip
 import json
 from typing import Any, Dict
@@ -44,12 +45,15 @@ def test_response_with_type_cast() -> None:
 
     manifest_response = MockResponse(
         b"""
-        {"schema": {
-            "elements": [
-                {"name": "id", "type": {"base": "integer"}},
-                {"name": "title", "type": {"base": "character varying"}}
-            ]
-        }}
+        {
+            "schema": {
+                "elements": [
+                    {"name": "id", "type": {"base": "integer"}},
+                    {"name": "title", "type": {"base": "character varying"}}
+                ]
+            },
+            "meta": {"record_count": 2}
+        }
         """,
         200,
     )
@@ -60,3 +64,41 @@ def test_response_with_type_cast() -> None:
     with mock.patch("requests.Session.get", return_value=data_response):
         data = response.read()
         assert data == [[1, "test_recipe1"], [2, "test_recipe2"]]
+
+
+def test_response_with_map() -> None:
+    @dataclasses.dataclass
+    class Item:
+        id: int
+        title: str
+
+    response_body = ResponseBody(
+        id=1,
+        data_file_urls=["https://queuery.example.com/data"],
+        error=None,
+        status="success",
+        manifest_file_url="https://queuery.example.com/manifest",
+    )
+    response = Response(response_body, enable_cast=True)
+
+    manifest_response = MockResponse(
+        b"""
+        {
+            "schema": {
+                "elements": [
+                    {"name": "id", "type": {"base": "integer"}},
+                    {"name": "title", "type": {"base": "character varying"}}
+                ]
+            },
+            "meta": {"record_count": 2}
+        }
+        """,
+        200,
+    )
+    with mock.patch("requests.Session.get", return_value=manifest_response):
+        response.fetch_manifest()
+
+    data_response = MockResponse(gzip.compress(b'"1","test_recipe1"\n"2","test_recipe2"'), 200)
+    with mock.patch("requests.Session.get", return_value=data_response):
+        data = list(response.map(Item))
+        assert data == [Item(id=1, title="test_recipe1"), Item(id=2, title="test_recipe2")]

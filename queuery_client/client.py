@@ -23,6 +23,7 @@ class Client(object):
         timeout: int = 300,
         enable_cast: bool = False,
         session: Optional[Session] = None,
+        use_manifest: Optional[bool] = None,
     ) -> None:
         endpoint = endpoint or os.getenv("QUEUERY_ENDPOINT")
         if endpoint is None:
@@ -33,6 +34,7 @@ class Client(object):
         self._timeout = timeout
         self._enable_cast = enable_cast
         self._session = session or Session()
+        self._use_manifest = use_manifest
 
     @property
     def _auth(self) -> Optional[Tuple[str, str]]:
@@ -78,6 +80,7 @@ class Client(object):
                 response=body,
                 enable_cast=self._enable_cast,
                 session=self._session,
+                use_manifest=self._use_manifest,
             )
 
     def wait_for(self, qid: int) -> Response:

@@ -14,12 +14,14 @@ class QueueryClient:
         timeout: int = 300,
         enable_cast: bool = False,
         session: Optional[Session] = None,
+        use_manifest: Optional[bool] = None,
     ) -> None:
         self._client = Client(
             endpoint=endpoint,
             timeout=timeout,
             enable_cast=enable_cast,
             session=session,
+            use_manifest=use_manifest,
         )
 
     def run(self, sql: str) -> Response:
