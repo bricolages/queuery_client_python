@@ -1,4 +1,9 @@
 # queuery_client_python
+[![CI](https://github.com/altescy/queuery_client_python/actions/workflows/ci.yaml/badge.svg)](https://github.com/altescy/queuery_client_python/actions/workflows/ci.yaml)
+[![deploy](https://github.com/bricolages/queuery_client_python/actions/workflows/pypi-publish.yaml/badge.svg)](https://github.com/bricolages/queuery_client_python/actions/workflows/pypi-publish.yaml)
+[![Python version](https://img.shields.io/pypi/pyversions/queuery-client)](https://github.com/altescy/queuery_client_python)
+[![pypi version](https://img.shields.io/pypi/v/queuery-client)](https://pypi.org/project/queuery-client/)
+[![License](https://img.shields.io/github/license/altescy/nlpstack)](https://github.com/altescy/queuery_client_python/blob/main/LICENSE)
 
 Queuery Redshift HTTP API Client for Python
 
