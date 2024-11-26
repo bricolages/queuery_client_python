@@ -46,7 +46,7 @@ class Client(object):
 
     @property
     def _enable_metadata(self) -> bool:
-        return self._enable_cast
+        return bool(self._enable_cast or self._use_manifest)
 
     def execute_query(self, select_stmt: str) -> Response:
         logger.info("Sending select statement to queuery...")
