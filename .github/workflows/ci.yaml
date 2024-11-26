@@ -34,7 +34,7 @@ jobs:
         cache: 'poetry'
 
     - name: Install dependencies
-      run: poetry install --extras pandas
+      run: poetry install --extras all
 
     - name: Lint with pysen
       run: make lint
